@@ -335,4 +335,12 @@ input:focus, textarea:focus {
     height: 0.3rem;
     bottom: 18%;
     right: 20%;
+}
+
+#messageFeed {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* IE 10+ */
+}
+#messageFeed::-webkit-scrollbar {
+  display: none;                /* Chrome/Safari/Webkit */
 } 

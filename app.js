@@ -85,23 +85,26 @@ messageForm.addEventListener('submit', async (e) => {
 
 // Render messages
 function renderMessages() {
-    messageFeed.innerHTML = messages.map(message => `
-        <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
-            <div class="flex justify-between items-start mb-4">
-                <h3 class="font-semibold text-gray-800">${escapeHtml(message.author)}</h3>
-                <span class="text-sm text-gray-500">${formatTimestamp(message.timestamp)}</span>
+    // Render oldest at top, newest at bottom
+    messageFeed.innerHTML = messages.slice().reverse().map(message => `
+        <div class=\"bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1\">
+            <div class=\"flex justify-between items-start mb-4\">
+                <h3 class=\"font-semibold text-gray-800\">${escapeHtml(message.author)}</h3>
+                <span class=\"text-sm text-gray-500\">${formatTimestamp(message.timestamp)}</span>
             </div>
-            <p class="text-gray-700 mb-4">${escapeHtml(message.content)}</p>
-            <div class="flex justify-end space-x-2">
-                <button onclick="editMessage(${message.id})" class="text-gray-500 hover:text-gray-700">
+            <p class=\"text-gray-700 mb-4\">${escapeHtml(message.content)}</p>
+            <div class=\"flex justify-end space-x-2\">
+                <button onclick=\"editMessage(${message.id})\" class=\"text-gray-500 hover:text-gray-700\">
                     ✏️
                 </button>
-                <button onclick="deleteMessage(${message.id})" class="text-gray-500 hover:text-red-500">
+                <button onclick=\"deleteMessage(${message.id})\" class=\"text-gray-500 hover:text-red-500\">
                     🗑️
                 </button>
             </div>
         </div>
     `).join('');
+    // Auto-scroll to bottom
+    messageFeed.scrollTop = messageFeed.scrollHeight;
 }
 
 // Helper function to format timestamp
