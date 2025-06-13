@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About OpenMic - Share Your Thoughts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'pastel-pink': '#FFD1DC',
+                        'pastel-blue': '#B5D8EB',
+                        'pastel-purple': '#E0BBE4',
+                        'pastel-green': '#C1E1C1',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(to right, #B5D8EB, #E0BBE4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pastel-blue/20 to-pastel-purple/20 min-h-screen">
+    <!-- Navbar -->
+    <nav class="fixed top-4 left-1/2 -translate-x-1/2 backdrop-blur-md bg-white/30 border border-white/20 z-50 rounded-2xl shadow-lg w-[90%] max-w-6xl">
+        <div class="container mx-auto px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center gap-3">
+                    <span class="realistic-orb realistic-orb-sm"></span>
+                    <span class="text-2xl font-bold gradient-text">OpenMic</span>
+                </a>
+            </div>
+            <div class="space-x-6">
+                <a href="about.html" class="px-5 py-2 rounded-full bg-pastel-blue/40 hover:bg-pastel-blue/60 transition-all text-gray-700">About</a>
+                <button class="px-5 py-2 rounded-full bg-pastel-blue/40 hover:bg-pastel-blue/60 transition-all text-gray-700">Login</button>
+                <button class="px-5 py-2 rounded-full bg-pastel-purple/40 hover:bg-pastel-purple/60 transition-all text-gray-700">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex flex-col items-center justify-center min-h-screen pt-32 pb-20">
+        <div class="w-[90%] max-w-4xl">
+            <div class="bg-white/30 backdrop-blur-md rounded-[3rem] border-2 border-white/20 p-12 shadow-2xl">
+                <h1 class="text-4xl font-bold gradient-text mb-8">About OpenMic</h1>
+                
+                <div class="space-y-6 text-gray-800">
+                    <p class="text-lg">
+                        OpenMic is a platform where you can share your thoughts, ideas, and messages with the world. 
+                        It's like having your own digital microphone, allowing you to express yourself freely and connect with others.
+                    </p>
+
+                    <h2 class="text-2xl font-semibold gradient-text mt-8 mb-4">Features</h2>
+                    <ul class="list-disc list-inside space-y-3">
+                        <li>Share your messages anonymously or with your name</li>
+                        <li>Beautiful, modern interface with dark mode support</li>
+                        <li>Real-time message updates</li>
+                        <li>Responsive design that works on all devices</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-semibold gradient-text mt-8 mb-4">How It Works</h2>
+                    <p class="text-lg">
+                        Simply click the "+" button to create a new message. You can choose to share your name or remain anonymous. 
+                        Your message will appear in the feed, where others can read and engage with your thoughts.
+                    </p>
+
+                    <h2 class="text-2xl font-semibold gradient-text mt-8 mb-4">Our Mission</h2>
+                    <p class="text-lg">
+                        We believe in the power of expression and connection. OpenMic provides a safe, 
+                        beautiful space for people to share their thoughts and be heard.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="fixed bottom-8 left-8 w-14 h-14 rounded-full bg-pastel-purple hover:bg-pastel-purple/80 text-white text-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center">
+        🌙
+    </button>
+
+    <script src="app.js"></script>
+</body>
+</html> 

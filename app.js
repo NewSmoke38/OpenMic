@@ -5,18 +5,20 @@ const createMessageModal = document.getElementById('createMessageModal');
 const messageForm = document.getElementById('messageForm');
 const cancelBtn = document.getElementById('cancelBtn');
 const themeToggle = document.getElementById('themeToggle');
+const loginBtn = document.getElementById('loginBtn');
+const loginModal = document.getElementById('loginModal');
+const loginForm = document.getElementById('loginForm');
+const loginCancelBtn = document.getElementById('loginCancelBtn');
+const signupBtn = document.getElementById('signupBtn');
+const signupModal = document.getElementById('signupModal');
+const signupForm = document.getElementById('signupForm');
+const signupCancelBtn = document.getElementById('signupCancelBtn');
 
 // Theme handling
-const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-const currentTheme = localStorage.getItem('theme');
-
-// Set initial theme
-if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
     document.documentElement.classList.add('dark');
     themeToggle.textContent = '☀️';
-} else {
-    document.documentElement.classList.remove('dark');
-    themeToggle.textContent = '🌙';
 }
 
 // Theme toggle handler
@@ -110,21 +112,131 @@ messageForm.addEventListener('submit', async (e) => {
     }
 });
 
+// Login modal handling
+loginBtn.addEventListener('click', () => {
+    loginModal.classList.remove('hidden');
+    loginModal.classList.add('flex');
+});
+
+loginCancelBtn.addEventListener('click', () => {
+    loginModal.classList.add('hidden');
+    loginModal.classList.remove('flex');
+    loginForm.reset();
+});
+
+// Close login modal when clicking outside
+loginModal.addEventListener('click', (e) => {
+    if (e.target === loginModal) {
+        loginModal.classList.add('hidden');
+        loginModal.classList.remove('flex');
+        loginForm.reset();
+    }
+});
+
+// Login form submission
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const rememberMe = document.getElementById('rememberMe').checked;
+    
+    try {
+        // In production, replace with actual API call
+        // await fetch('/login', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({ email, password, rememberMe })
+        // });
+        
+        console.log('Login attempt:', { email, password, rememberMe });
+        
+        // Reset and close modal
+        loginForm.reset();
+        loginModal.classList.add('hidden');
+        loginModal.classList.remove('flex');
+    } catch (error) {
+        console.error('Error logging in:', error);
+        alert('Failed to login. Please try again.');
+    }
+});
+
+// Sign Up modal handling
+signupBtn.addEventListener('click', () => {
+    signupModal.classList.remove('hidden');
+    signupModal.classList.add('flex');
+});
+
+signupCancelBtn.addEventListener('click', () => {
+    signupModal.classList.add('hidden');
+    signupModal.classList.remove('flex');
+    signupForm.reset();
+});
+
+// Close sign up modal when clicking outside
+signupModal.addEventListener('click', (e) => {
+    if (e.target === signupModal) {
+        signupModal.classList.add('hidden');
+        signupModal.classList.remove('flex');
+        signupForm.reset();
+    }
+});
+
+// Sign Up form submission
+signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const termsAgree = document.getElementById('termsAgree').checked;
+    
+    if (password !== confirmPassword) {
+        alert('Passwords do not match!');
+        return;
+    }
+    
+    if (!termsAgree) {
+        alert('Please agree to the Terms and Conditions');
+        return;
+    }
+    
+    try {
+        // In production, replace with actual API call
+        // await fetch('/signup', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({ name, email, password })
+        // });
+        
+        console.log('Sign up attempt:', { name, email, password, termsAgree });
+        
+        // Reset and close modal
+        signupForm.reset();
+        signupModal.classList.add('hidden');
+        signupModal.classList.remove('flex');
+    } catch (error) {
+        console.error('Error signing up:', error);
+        alert('Failed to sign up. Please try again.');
+    }
+});
+
 // Render messages
 function renderMessages() {
     // Render oldest at top, newest at bottom
     messageFeed.innerHTML = messages.slice().reverse().map(message => `
-        <div class=\"bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1\">
-            <div class=\"flex justify-between items-start mb-4\">
-                <h3 class=\"author font-semibold\">${escapeHtml(message.author)}</h3>
-                <span class=\"text-sm text-gray-500\">${formatTimestamp(message.timestamp)}</span>
+        <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+            <div class="flex justify-between items-start mb-4">
+                <h3 class="author font-semibold">${escapeHtml(message.author)}</h3>
+                <span class="text-sm text-gray-500">${formatTimestamp(message.timestamp)}</span>
             </div>
-            <p class=\"text-gray-700 mb-4\">${escapeHtml(message.content)}</p>
-            <div class=\"flex justify-end space-x-2\">
-                <button onclick=\"editMessage(${message.id})\" class=\"text-gray-500 hover:text-gray-700\">
+            <p class="text-gray-700 mb-4">${escapeHtml(message.content)}</p>
+            <div class="flex justify-end space-x-2">
+                <button onclick="editMessage(${message.id})" class="text-gray-500 hover:text-gray-700">
                     ✏️
                 </button>
-                <button onclick=\"deleteMessage(${message.id})\" class=\"text-gray-500 hover:text-red-500\">
+                <button onclick="deleteMessage(${message.id})" class="text-gray-500 hover:text-red-500">
                     🗑️
                 </button>
             </div>
