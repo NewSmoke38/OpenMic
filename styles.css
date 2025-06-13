@@ -770,25 +770,26 @@ input:focus, textarea:focus {
     opacity: 0.8;
 }
 
-.dark #signupBtn {
-    background: rgba(224, 187, 228, 0.7);
-    box-shadow: 0 0 12px rgba(224, 187, 228, 0.3);
-}
-
-.dark #signupBtn:hover {
-    background: rgba(224, 187, 228, 0.85);
-    box-shadow: 0 0 15px rgba(224, 187, 228, 0.4);
-    transform: translateY(-1px);
-}
-
 .dark #loginBtn, .dark #aboutBtn {
     background: rgba(181, 216, 235, 0.7) !important;
-    box-shadow: 0 0 12px rgba(181, 216, 235, 0.3) !important;
     color: var(--text-primary) !important;
+    box-shadow: 0 0 12px rgba(181, 216, 235, 0.3) !important;
 }
 
 .dark #loginBtn:hover, .dark #aboutBtn:hover {
     background: rgba(181, 216, 235, 0.85) !important;
     box-shadow: 0 0 15px rgba(181, 216, 235, 0.4) !important;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+}
+
+.dark #signupBtn {
+    background: rgba(224, 187, 228, 0.7) !important;
+    color: var(--text-primary) !important;
+    box-shadow: 0 0 12px rgba(224, 187, 228, 0.3) !important;
+}
+
+.dark #signupBtn:hover {
+    background: rgba(224, 187, 228, 0.85) !important;
+    box-shadow: 0 0 15px rgba(224, 187, 228, 0.4) !important;
+    transform: translateY(-2px);
 } 
