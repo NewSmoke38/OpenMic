@@ -4,6 +4,33 @@ const createMessageBtn = document.getElementById('createMessageBtn');
 const createMessageModal = document.getElementById('createMessageModal');
 const messageForm = document.getElementById('messageForm');
 const cancelBtn = document.getElementById('cancelBtn');
+const themeToggle = document.getElementById('themeToggle');
+
+// Theme handling
+const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+const currentTheme = localStorage.getItem('theme');
+
+// Set initial theme
+if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
+    document.documentElement.classList.add('dark');
+    themeToggle.textContent = '☀️';
+} else {
+    document.documentElement.classList.remove('dark');
+    themeToggle.textContent = '🌙';
+}
+
+// Theme toggle handler
+themeToggle.addEventListener('click', () => {
+    if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+        themeToggle.textContent = '🌙';
+    } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        themeToggle.textContent = '☀️';
+    }
+});
 
 // Sample messages array (replace with API calls in production)
 let messages = [
@@ -89,7 +116,7 @@ function renderMessages() {
     messageFeed.innerHTML = messages.slice().reverse().map(message => `
         <div class=\"bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1\">
             <div class=\"flex justify-between items-start mb-4\">
-                <h3 class=\"font-semibold text-gray-800\">${escapeHtml(message.author)}</h3>
+                <h3 class=\"author font-semibold\">${escapeHtml(message.author)}</h3>
                 <span class=\"text-sm text-gray-500\">${formatTimestamp(message.timestamp)}</span>
             </div>
             <p class=\"text-gray-700 mb-4\">${escapeHtml(message.content)}</p>
