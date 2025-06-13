@@ -89,7 +89,17 @@ async function fetchMessages() {
 
 // Add event listener for page load
 document.addEventListener('DOMContentLoaded', () => {
-    fetchMessages();
+    // Only fetch messages if we're on the main page (where messageFeed exists)
+    if (document.getElementById('messageFeed')) {
+        fetchMessages();
+    }
+    
+    // Check auth state
+    if (authState.isLoggedIn) {
+        document.getElementById('loginBtn').classList.add('hidden');
+        document.getElementById('signupBtn').classList.add('hidden');
+        document.getElementById('logoutBtn').classList.remove('hidden');
+    }
 });
 
 // Modal handling
