@@ -308,13 +308,6 @@ function renderMessages() {
 }
 
 function toggleLike(messageId) {
-    if (!isLoggedIn) {
-        // Show login modal if user is not logged in
-        loginModal.classList.remove('hidden');
-        loginModal.classList.add('flex');
-        return;
-    }
-
     const message = messages.find(m => m.id === messageId);
     if (message) {
         message.liked = !message.liked;
