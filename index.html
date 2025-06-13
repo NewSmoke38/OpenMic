@@ -23,7 +23,7 @@
 </head>
 <body class="bg-gradient-to-br from-pastel-blue/20 to-pastel-purple/20 min-h-screen">
     <!-- Navbar -->
-    <nav class="fixed top-4 left-1/2 -translate-x-1/2 backdrop-blur-md bg-white/30 border border-white/20 z-50 rounded-2xl shadow-lg w-[90%] max-w-6xl">
+    <nav class="fixed top-4 left-1/2 -translate-x-1/2 backdrop-blur-md bg-white/30 border border-white/20 z-50 rounded-[2.5rem] shadow-[0_4px_20px_rgba(224,187,228,0.3)] w-[90%] max-w-6xl">
         <div class="container mx-auto px-8 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <a href="index.html" class="flex items-center gap-3">
@@ -32,9 +32,9 @@
                 </a>
             </div>
             <div class="space-x-6">
-                <a href="about.html" class="px-5 py-2 rounded-full bg-pastel-blue/40 hover:bg-pastel-blue/60 transition-all text-gray-700">About</a>
-                <button id="loginBtn" class="px-5 py-2 rounded-full bg-pastel-blue/40 hover:bg-pastel-blue/60 transition-all text-gray-700">Login</button>
-                <button id="signupBtn" class="px-5 py-2 rounded-full bg-pastel-purple/40 hover:bg-pastel-purple/60 transition-all text-gray-700">Sign Up</button>
+                <button href="about.html" id="aboutBtn" onclick="window.location='about.html'" class="px-5 py-2 rounded-full bg-pastel-blue/40 hover:bg-pastel-blue/60 transition-all text-gray-700 w-[100px] text-center">About</button>
+                <button id="loginBtn" class="px-5 py-2 rounded-full bg-pastel-blue/40 hover:bg-pastel-blue/60 transition-all text-gray-700 w-[100px] text-center">Login</button>
+                <button id="signupBtn" class="px-5 py-2 rounded-full bg-pastel-purple/40 hover:bg-pastel-purple/60 transition-all text-gray-700 w-[100px] text-center">Sign Up</button>
             </div>
         </div>
     </nav>
@@ -45,7 +45,7 @@
         <div class="realistic-orb mb-[-3.5rem] z-30"></div>
         <!-- Message Box -->
         <div class="relative flex flex-col items-center" style="width:340px;">
-            <div class="sheep-box bg-white/30 backdrop-blur-md rounded-[3rem] border-2 border-white/20 relative pt-20 pb-8 px-8 w-[340px] min-h-[340px] flex flex-col items-center shadow-2xl">
+            <div class="sheep-box bg-white/30 backdrop-blur-md rounded-[5rem] border-6 border-white/20 relative pt-20 pb-8 px-8 w-[340px] min-h-[340px] flex flex-col items-center shadow-[0_20px_50px_rgba(224,187,228,0.3)]">
                 <!-- Message Feed -->
                 <div id="messageFeed" class="flex flex-col justify-end gap-4 w-full mt-2 h-[26rem] overflow-y-auto pr-2 pt-6">
                     <!-- Messages will be dynamically inserted here -->
@@ -61,25 +61,23 @@
 
     <!-- Create Message Button -->
     <button id="createMessageBtn" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-pastel-purple hover:bg-pastel-purple/80 text-white text-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center">
-        +
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
     </button>
 
     <!-- Create Message Modal -->
     <div id="createMessageModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
-            <h2 class="text-2xl font-bold mb-4 text-gray-800">Share Your Message</h2>
+        <div class="bg-white rounded-[4rem] p-8 w-full max-w-md mx-4 border-4 border-white/20 shadow-2xl">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Share Your Message</h2>
             <form id="messageForm" class="space-y-4">
                 <div>
-                    <label class="block text-gray-700 mb-2" for="authorName">Your Name</label>
-                    <input type="text" id="authorName" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-pastel-purple" required>
-                </div>
-                <div>
                     <label class="block text-gray-700 mb-2" for="messageContent">Your Message</label>
-                    <textarea id="messageContent" rows="4" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-pastel-purple" required></textarea>
+                    <textarea id="messageContent" rows="4" class="w-full px-4 py-2 rounded-[2rem] border-2 border-gray-300 focus:outline-none focus:border-pastel-purple" required></textarea>
                 </div>
-                <div class="flex justify-end space-x-3">
-                    <button type="button" id="cancelBtn" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700">Cancel</button>
-                    <button type="submit" class="px-4 py-2 rounded-lg bg-pastel-purple hover:bg-pastel-purple/80 text-white">Post Message</button>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" id="cancelBtn" class="px-6 py-2 rounded-[2rem] bg-gray-200 hover:bg-gray-300 text-gray-700 border-2 border-gray-300">Cancel</button>
+                    <button type="submit" class="px-6 py-2 rounded-[2rem] bg-pastel-purple hover:bg-pastel-purple/80 text-white border-2 border-pastel-purple/50">Post Message</button>
                 </div>
             </form>
         </div>
@@ -87,24 +85,24 @@
 
     <!-- Login Modal -->
     <div id="loginModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
-            <h2 class="text-2xl font-bold mb-4 text-gray-800">Login</h2>
+        <div class="bg-white rounded-[4rem] p-8 w-full max-w-md mx-4 border-4 border-white/20 shadow-2xl">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Login</h2>
             <form id="loginForm" class="space-y-4">
                 <div>
                     <label class="block text-gray-700 mb-2" for="email">Email</label>
-                    <input type="email" id="email" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-pastel-blue" required>
+                    <input type="email" id="email" class="w-full px-4 py-2 rounded-[2rem] border-2 border-gray-300 focus:outline-none focus:border-pastel-blue" required>
                 </div>
                 <div>
                     <label class="block text-gray-700 mb-2" for="password">Password</label>
-                    <input type="password" id="password" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-pastel-blue" required>
+                    <input type="password" id="password" class="w-full px-4 py-2 rounded-[2rem] border-2 border-gray-300 focus:outline-none focus:border-pastel-blue" required>
                 </div>
                 <div class="flex items-center">
                     <input type="checkbox" id="rememberMe" class="mr-2">
                     <label for="rememberMe" class="text-gray-700">Remember me</label>
                 </div>
-                <div class="flex justify-end space-x-3">
-                    <button type="button" id="loginCancelBtn" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700">Cancel</button>
-                    <button type="submit" class="px-4 py-2 rounded-lg bg-pastel-blue hover:bg-pastel-blue/80 text-white">Login</button>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" id="loginCancelBtn" class="px-6 py-2 rounded-[2rem] bg-gray-200 hover:bg-gray-300 text-gray-700 border-2 border-gray-300">Cancel</button>
+                    <button type="submit" class="px-6 py-2 rounded-[2rem] bg-pastel-blue hover:bg-pastel-blue/80 text-white border-2 border-pastel-blue/50">Login</button>
                 </div>
             </form>
         </div>
@@ -112,32 +110,32 @@
 
     <!-- Sign Up Modal -->
     <div id="signupModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
-            <h2 class="text-2xl font-bold mb-4 text-gray-800">Sign Up</h2>
+        <div class="bg-white rounded-[4rem] p-8 w-full max-w-md mx-4 border-4 border-white/20 shadow-2xl">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Sign Up</h2>
             <form id="signupForm" class="space-y-4">
                 <div>
                     <label class="block text-gray-700 mb-2" for="signupName">Full Name</label>
-                    <input type="text" id="signupName" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-pastel-purple" required>
+                    <input type="text" id="signupName" class="w-full px-4 py-2 rounded-[2rem] border-2 border-gray-300 focus:outline-none focus:border-pastel-purple" required>
                 </div>
                 <div>
                     <label class="block text-gray-700 mb-2" for="signupEmail">Email</label>
-                    <input type="email" id="signupEmail" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-pastel-purple" required>
+                    <input type="email" id="signupEmail" class="w-full px-4 py-2 rounded-[2rem] border-2 border-gray-300 focus:outline-none focus:border-pastel-purple" required>
                 </div>
                 <div>
                     <label class="block text-gray-700 mb-2" for="signupPassword">Password</label>
-                    <input type="password" id="signupPassword" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-pastel-purple" required>
+                    <input type="password" id="signupPassword" class="w-full px-4 py-2 rounded-[2rem] border-2 border-gray-300 focus:outline-none focus:border-pastel-purple" required>
                 </div>
                 <div>
                     <label class="block text-gray-700 mb-2" for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-pastel-purple" required>
+                    <input type="password" id="confirmPassword" class="w-full px-4 py-2 rounded-[2rem] border-2 border-gray-300 focus:outline-none focus:border-pastel-purple" required>
                 </div>
                 <div class="flex items-center">
                     <input type="checkbox" id="termsAgree" class="mr-2" required>
                     <label for="termsAgree" class="text-gray-700">I agree to the Terms and Conditions</label>
                 </div>
-                <div class="flex justify-end space-x-3">
-                    <button type="button" id="signupCancelBtn" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700">Cancel</button>
-                    <button type="submit" class="px-4 py-2 rounded-lg bg-pastel-purple hover:bg-pastel-purple/80 text-white">Sign Up</button>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" id="signupCancelBtn" class="px-6 py-2 rounded-[2rem] bg-gray-200 hover:bg-gray-300 text-gray-700 border-2 border-gray-300">Cancel</button>
+                    <button type="submit" class="px-6 py-2 rounded-[2rem] bg-pastel-purple hover:bg-pastel-purple/80 text-white border-2 border-pastel-purple/50">Sign Up</button>
                 </div>
             </form>
         </div>
@@ -145,7 +143,9 @@
 
     <!-- Theme Toggle Button -->
     <button id="themeToggle" class="fixed bottom-8 left-8 w-14 h-14 rounded-full bg-pastel-purple hover:bg-pastel-purple/80 text-white text-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center">
-        🌙
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
     </button>
 
     <script src="app.js"></script>

@@ -193,20 +193,6 @@
     opacity: 0.8;
 }
 
-.dark .sheep-finger {
-    background: var(--bg-secondary);
-    border: 3px solid transparent;
-    border-radius: 0 0 1rem 1rem;
-    margin: 0 0.07rem;
-    position: relative;
-    z-index: 11;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-    background-image: linear-gradient(var(--bg-secondary), var(--bg-secondary)), 
-                      linear-gradient(135deg, #B5D8EB, #E0BBE4);
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
-}
-
 .dark .sheep-finger::before {
     content: '';
     position: absolute;
@@ -225,8 +211,9 @@
 }
 
 .dark nav {
-    background: rgba(26, 26, 46, 0.3);
-    border-color: rgba(45, 55, 72, 0.2);
+    background: var(--bg-secondary);
+    border-color: rgba(224, 187, 228, 0.15);
+    box-shadow: none;
 }
 
 .dark button {
@@ -334,6 +321,7 @@ input:focus, textarea:focus {
     position: relative;
     z-index: 10;
 }
+
 .sheep-fluff {
     position: absolute;
     top: 0.5rem;
@@ -347,6 +335,7 @@ input:focus, textarea:focus {
     z-index: 2;
     box-shadow: 0 2px 8px 0 rgba(224,187,228,0.10);
 }
+
 .sheep-face-inner {
     position: absolute;
     top: 1.7rem;
@@ -359,6 +348,7 @@ input:focus, textarea:focus {
     z-index: 3;
     box-shadow: 0 2px 8px 0 rgba(224,187,228,0.10);
 }
+
 .sheep-ear {
     position: absolute;
     top: 2.2rem;
@@ -369,14 +359,17 @@ input:focus, textarea:focus {
     border-radius: 60% 80% 60% 80%/80% 60% 80% 60%;
     z-index: 1;
 }
+
 .sheep-ear-left {
     left: -1.2rem;
     transform: rotate(-18deg);
 }
+
 .sheep-ear-right {
     right: -1.2rem;
     transform: rotate(18deg);
 }
+
 .sheep-ear::after {
     content: '';
     position: absolute;
@@ -388,10 +381,12 @@ input:focus, textarea:focus {
     border-radius: 50%;
     z-index: 2;
 }
+
 .sheep-ear-right::after {
     left: auto;
     right: 0.5rem;
 }
+
 .sheep-eye {
     position: absolute;
     top: 2.1rem;
@@ -401,12 +396,15 @@ input:focus, textarea:focus {
     border-radius: 50%;
     z-index: 4;
 }
+
 .sheep-eye-left {
     left: 1.2rem;
 }
+
 .sheep-eye-right {
     right: 1.2rem;
 }
+
 .sheep-cheek {
     position: absolute;
     top: 3.1rem;
@@ -417,12 +415,15 @@ input:focus, textarea:focus {
     z-index: 4;
     opacity: 0.85;
 }
+
 .sheep-cheek-left {
     left: 0.7rem;
 }
+
 .sheep-cheek-right {
     right: 0.7rem;
 }
+
 .sheep-nose {
     position: absolute;
     top: 2.8rem;
@@ -435,6 +436,7 @@ input:focus, textarea:focus {
     z-index: 5;
     border: 2px solid #e0bbE4;
 }
+
 .sheep-smile {
     position: absolute;
     top: 3.5rem;
@@ -450,6 +452,7 @@ input:focus, textarea:focus {
 .sheep-paw-left {
     margin-right: 0.5rem;
 }
+
 .sheep-paw-right {
     margin-left: 0.5rem;
 }
@@ -503,17 +506,6 @@ input:focus, textarea:focus {
     right: 1rem;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 .realistic-orb {
     width: 7.5rem;
     height: 7.5rem;
@@ -531,6 +523,7 @@ input:focus, textarea:focus {
     z-index: 30;
     transition: transform 0.7s cubic-bezier(.4,2,.3,1);
 }
+
 .realistic-orb::before {
     content: '';
     position: absolute;
@@ -542,6 +535,7 @@ input:focus, textarea:focus {
     opacity: 0.85;
     z-index: 2;
 }
+
 .realistic-orb::after {
     content: '';
     position: absolute;
@@ -553,10 +547,12 @@ input:focus, textarea:focus {
     opacity: 0.7;
     z-index: 2;
 }
+
 .realistic-orb:hover {
     animation: orb-spin 1.2s cubic-bezier(.4,2,.3,1) 1;
     transform: rotateY(25deg) rotateZ(10deg) scale(1.04);
 }
+
 @keyframes orb-spin {
     0% { transform: rotateY(0deg) rotateZ(0deg) scale(1); }
     60% { transform: rotateY(30deg) rotateZ(12deg) scale(1.07); }
@@ -574,12 +570,14 @@ input:focus, textarea:focus {
         0 1px 3px 0 rgba(224,187,228,0.10),
         0 0 0 3px rgba(255,255,255,0.10) inset;
 }
+
 .realistic-orb-sm::before {
     width: 0.7rem;
     height: 0.35rem;
     top: 22%;
     left: 22%;
 }
+
 .realistic-orb-sm::after {
     width: 0.6rem;
     height: 0.3rem;
@@ -588,11 +586,12 @@ input:focus, textarea:focus {
 }
 
 #messageFeed {
-  scrollbar-width: none;        /* Firefox */
-  -ms-overflow-style: none;     /* IE 10+ */
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* IE 10+ */
 }
+
 #messageFeed::-webkit-scrollbar {
-  display: none;                /* Chrome/Safari/Webkit */
+    display: none;                /* Chrome/Safari/Webkit */
 }
 
 .dark .text-2xl.font-bold.text-gray-800 {
@@ -769,4 +768,27 @@ input:focus, textarea:focus {
         rgba(224, 187, 228, 0.6)
     );
     opacity: 0.8;
+}
+
+.dark #signupBtn {
+    background: rgba(224, 187, 228, 0.7);
+    box-shadow: 0 0 12px rgba(224, 187, 228, 0.3);
+}
+
+.dark #signupBtn:hover {
+    background: rgba(224, 187, 228, 0.85);
+    box-shadow: 0 0 15px rgba(224, 187, 228, 0.4);
+    transform: translateY(-1px);
+}
+
+.dark #loginBtn, .dark #aboutBtn {
+    background: rgba(181, 216, 235, 0.7) !important;
+    box-shadow: 0 0 12px rgba(181, 216, 235, 0.3) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark #loginBtn:hover, .dark #aboutBtn:hover {
+    background: rgba(181, 216, 235, 0.85) !important;
+    box-shadow: 0 0 15px rgba(181, 216, 235, 0.4) !important;
+    transform: translateY(-1px);
 } 
