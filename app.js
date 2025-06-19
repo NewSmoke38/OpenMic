@@ -14,6 +14,95 @@ const signupModal = document.getElementById('signupModal');
 const signupForm = document.getElementById('signupForm');
 const signupCancelBtn = document.getElementById('signupCancelBtn');
 
+// API Integration
+const API_BASE = 'http://localhost:8000/api/v1/auth';
+
+// Register API call
+async function registerUser(username, email, password, fullName) {
+    try {
+        const response = await fetch(`${API_BASE}/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, email, password, fullName })
+        });
+        const data = await response.json();
+        return { success: response.ok, data };
+    } catch (error) {
+        console.error('Register error:', error);
+        return { success: false, data: { message: 'Network error' } };
+    }
+}
+
+// Login API call
+async function loginUser(email, password) {
+    try {
+        const response = await fetch(`${API_BASE}/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        return { success: response.ok, data };
+    } catch (error) {
+        console.error('Login error:', error);
+        return { success: false, data: { message: 'Network error' } };
+    }
+}
+
+// Logout API call
+async function logoutUser() {
+    try {
+        const response = await fetch(`${API_BASE}/logout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        const data = await response.json();
+        return { success: response.ok, data };
+    } catch (error) {
+        console.error('Logout error:', error);
+        return { success: false, data: { message: 'Network error' } };
+    }
+}
+
+// Auth state management
+let isLoggedIn = false;
+let currentUser = null;
+
+// Logout function
+async function handleLogout() {
+    try {
+        const result = await logoutUser();
+        
+        if (result.success) {
+            console.log('Logout successful:', result.data);
+            isLoggedIn = false;
+            currentUser = null;
+            
+            // Update UI to show logged out state
+            document.getElementById('loginBtn').classList.remove('hidden');
+            document.getElementById('signupBtn').classList.remove('hidden');
+            document.getElementById('logoutBtn').classList.add('hidden');
+            
+            alert('Logout successful!');
+        } else {
+            console.log('Logout failed:', result.data.message);
+            alert('Logout failed: ' + result.data.message);
+        }
+    } catch (error) {
+        console.error('Error logging out:', error);
+        alert('Failed to logout. Please try again.');
+    }
+}
+
+// Make handleLogout globally accessible
+window.handleLogout = handleLogout;
+
 // Theme handling
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme === 'dark') {
@@ -62,11 +151,6 @@ let messages = [
     },
 ];
 
-// Add at the top with other variables
-let isLoggedIn = false; // This will be set to true when user logs in
-let currentUser = null; // This will store the logged-in user's info
-
-
 // Add after the messages array and before the modal handling
 async function fetchMessages() {
     try {
@@ -95,10 +179,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Check auth state
-    if (authState.isLoggedIn) {
+    if (isLoggedIn) {
         document.getElementById('loginBtn').classList.add('hidden');
         document.getElementById('signupBtn').classList.add('hidden');
-        document.getElementById('logoutBtn').classList.remove('hidden');
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) logoutBtn.classList.remove('hidden');
     }
 });
 
@@ -186,24 +271,30 @@ loginForm.addEventListener('submit', async (e) => {
     
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    const rememberMe = document.getElementById('rememberMe').checked;
     
     try {
-        // In production, replace with actual API call
-        // await fetch('/login', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ email, password, rememberMe })
-        // });
+        const result = await loginUser(email, password);
         
-        console.log('Login attempt:', { email, password, rememberMe });
-        isLoggedIn = true;
-        currentUser = { email }; // Set current user info
-        
-        // Reset and close modal
-        loginForm.reset();
-        loginModal.classList.add('hidden');
-        loginModal.classList.remove('flex');
+        if (result.success) {
+            console.log('Login successful:', result.data);
+            isLoggedIn = true;
+            currentUser = { email }; // Set current user info
+            
+            // Reset and close modal
+            loginForm.reset();
+            loginModal.classList.add('hidden');
+            loginModal.classList.remove('flex');
+            
+            // Update UI to show logged in state
+            document.getElementById('loginBtn').classList.add('hidden');
+            document.getElementById('signupBtn').classList.add('hidden');
+            document.getElementById('logoutBtn').classList.remove('hidden');
+            
+            alert('Login successful!');
+        } else {
+            console.log('Login failed:', result.data.message);
+            alert('Login failed: ' + result.data.message);
+        }
     } catch (error) {
         console.error('Error logging in:', error);
         alert('Failed to login. Please try again.');
@@ -235,10 +326,11 @@ signupModal.addEventListener('click', (e) => {
 signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const name = document.getElementById('signupName').value;
+    const username = document.getElementById('signupName').value; // Using name field for username
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
+    const fullName = document.getElementById('signupName').value; // Using name as fullName
     const termsAgree = document.getElementById('termsAgree').checked;
     
     if (password !== confirmPassword) {
@@ -252,19 +344,21 @@ signupForm.addEventListener('submit', async (e) => {
     }
     
     try {
-        // In production, replace with actual API call
-        // await fetch('/signup', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ name, email, password })
-        // });
+        const result = await registerUser(username, email, password, fullName);
         
-        console.log('Sign up attempt:', { name, email, password, termsAgree });
-        
-        // Reset and close modal
-        signupForm.reset();
-        signupModal.classList.add('hidden');
-        signupModal.classList.remove('flex');
+        if (result.success) {
+            console.log('Registration successful:', result.data);
+            
+            // Reset and close modal
+            signupForm.reset();
+            signupModal.classList.add('hidden');
+            signupModal.classList.remove('flex');
+            
+            alert('Registration successful! You can now login.');
+        } else {
+            console.log('Registration failed:', result.data.message);
+            alert('Registration failed: ' + result.data.message);
+        }
     } catch (error) {
         console.error('Error signing up:', error);
         alert('Failed to sign up. Please try again.');
