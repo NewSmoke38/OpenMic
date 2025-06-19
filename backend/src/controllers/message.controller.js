@@ -1,0 +1,91 @@
+import { Message } from "../models/message.model.js";
+
+// Create new message
+const createMessage = async (req, res) => {
+    try {
+        const { content } = req.body;
+        const author = req.body.author || "Anonymous";
+        const authorId = req.body.authorId || "000000000000000000000000"; // Default ObjectId
+
+        // Basic validation
+        if (!content) {
+            return res.status(400).json({ message: "Message content is required." });
+        }
+
+        // Create new message
+        const message = new Message({
+            content,
+            author,
+            authorId
+        });
+
+        await message.save();
+
+        res.status(201).json({ message: "Message created successfully.", data: message });
+
+    } catch (err) {
+        console.error("Create Message Error:", err);
+        res.status(500).json({ message: "Server error." });
+    }
+};
+
+// Get all messages
+const getMessages = async (req, res) => {
+    try {
+        const messages = await Message.find().sort({ createdAt: -1 });
+        res.status(200).json({ messages });
+
+    } catch (err) {
+        console.error("Get Messages Error:", err);
+        res.status(500).json({ message: "Server error." });
+    }
+};
+
+// Update message
+const editMessage = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { content } = req.body;
+
+        if (!content) {
+            return res.status(400).json({ message: "Message content is required." });
+        }
+
+        const message = await Message.findByIdAndUpdate(
+            id,
+            { content },
+            { new: true }
+        );
+
+        if (!message) {
+            return res.status(404).json({ message: "Message not found." });
+        }
+
+        res.status(200).json({ message: "Message updated successfully.", data: message });
+
+    } catch (err) {
+        console.error("Update Message Error:", err);
+        res.status(500).json({ message: "Server error." });
+    }
+};
+
+// Delete message
+const deleteMessage = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const message = await Message.findByIdAndDelete(id);
+
+        if (!message) {
+            return res.status(404).json({ message: "Message not found." });
+        }
+
+        res.status(200).json({ message: "Message deleted successfully." });
+
+    } catch (err) {
+        console.error("Delete Message Error:", err);
+        res.status(500).json({ message: "Server error." });
+    }
+};
+
+export { createMessage, getMessages, editMessage, deleteMessage }; 
