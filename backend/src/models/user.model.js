@@ -10,7 +10,7 @@ const userSchema = new Schema(
             unique: true,
             lowercase: true,
             minlength: 1,
-            maxlength: 10
+            maxlength: 20
         },
         email: {
             type: String,
@@ -21,14 +21,14 @@ const userSchema = new Schema(
         password: {
             type: String,
             required: true,
-            minlength: 4,
-            maxlength: 8
+            minlength: 2,
+            maxlength: 10
         },
         fullName: {
             type: String,
             required: true,
             minlength: 1,
-            maxLength: 10
+            maxLength: 20
         }
     },
 

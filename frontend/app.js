@@ -16,6 +16,9 @@ const signupCancelBtn = document.getElementById('signupCancelBtn');
 
 // API Integration
 const API_BASE = 'http://localhost:8000/api/v1/auth';
+// Alternative ports if 8000 doesn't work:
+// const API_BASE = 'http://localhost:3000/api/v1/auth';
+// const API_BASE = 'http://localhost:5000/api/v1/auth';
 
 // Register API call
 async function registerUser(username, email, password, fullName) {
@@ -397,8 +400,11 @@ function renderMessages() {
             </div>
         </div>
     `).join('');
-    // Auto-scroll to bottom
-    messageFeed.scrollTop = messageFeed.scrollHeight;
+    
+    // Scroll to top to show oldest messages first (with small delay to ensure DOM update)
+    setTimeout(() => {
+        messageFeed.scrollTop = 0;
+    }, 10);
 }
 
 function toggleLike(messageId) {

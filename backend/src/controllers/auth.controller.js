@@ -1,5 +1,4 @@
 import { User } from "../models/user.model.js";
-import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
 
@@ -35,7 +34,6 @@ const generateAccessAndRefreshTokens = async (userId) => {
       return res.status(409).json({ message: "User already exists." });
     }
 
-
     // Save new user
     const user = new User({
       fullName,
@@ -46,22 +44,36 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
     await user.save();
 
-    // Generate tokens
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
+    try {
+      // Generate tokens
+      const accessToken = user.generateAccessToken();
+      const refreshToken = user.generateRefreshToken();
 
-    // Success response with tokens
-    res.status(201).json({ 
-      message: "User registered successfully.",
-      accessToken,
-      refreshToken,
-      user: {
-        id: user._id,
-        email: user.email,
-        username: user.username,
-        fullName: user.fullName
-      }
-    });
+      // Success response with tokens
+      res.status(201).json({ 
+        message: "User registered successfully.",
+        accessToken,
+        refreshToken,
+        user: {
+          id: user._id,
+          email: user.email,
+          username: user.username,
+          fullName: user.fullName
+        }
+      });
+    } catch (tokenError) {
+      console.error("Token generation error:", tokenError);
+      // If token generation fails, still return success but without tokens
+      res.status(201).json({ 
+        message: "User registered successfully. (Token generation failed)",
+        user: {
+          id: user._id,
+          email: user.email,
+          username: user.username,
+          fullName: user.fullName
+        }
+      });
+    }
 
   } catch (err) {
     console.error("Register Error:", err);
@@ -89,22 +101,36 @@ const generateAccessAndRefreshTokens = async (userId) => {
       return res.status(401).json({ message: "Invalid credentials." });
     }
 
-    // Generate tokens
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
+    try {
+      // Generate tokens
+      const accessToken = user.generateAccessToken();
+      const refreshToken = user.generateRefreshToken();
 
-    // Success response with tokens
-    res.status(200).json({ 
-      message: "Login successful.",
-      accessToken,
-      refreshToken,
-      user: {
-        id: user._id,
-        email: user.email,
-        username: user.username,
-        fullName: user.fullName
-      }
-    });
+      // Success response with tokens
+      res.status(200).json({ 
+        message: "Login successful.",
+        accessToken,
+        refreshToken,
+        user: {
+          id: user._id,
+          email: user.email,
+          username: user.username,
+          fullName: user.fullName
+        }
+      });
+    } catch (tokenError) {
+      console.error("Token generation error:", tokenError);
+      // If token generation fails, still return success but without tokens
+      res.status(200).json({ 
+        message: "Login successful. (Token generation failed)",
+        user: {
+          id: user._id,
+          email: user.email,
+          username: user.username,
+          fullName: user.fullName
+        }
+      });
+    }
 
   } catch (err) {
     console.error("Login Error:", err);
