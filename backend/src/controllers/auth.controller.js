@@ -46,8 +46,22 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
     await user.save();
 
-    // Success response
-    res.status(201).json({ message: "User registered successfully." });
+    // Generate tokens
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+
+    // Success response with tokens
+    res.status(201).json({ 
+      message: "User registered successfully.",
+      accessToken,
+      refreshToken,
+      user: {
+        id: user._id,
+        email: user.email,
+        username: user.username,
+        fullName: user.fullName
+      }
+    });
 
   } catch (err) {
     console.error("Register Error:", err);
@@ -75,8 +89,22 @@ const generateAccessAndRefreshTokens = async (userId) => {
       return res.status(401).json({ message: "Invalid credentials." });
     }
 
-    // Success (token step skipped for now)
-    res.status(200).json({ message: "Login successful." });
+    // Generate tokens
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+
+    // Success response with tokens
+    res.status(200).json({ 
+      message: "Login successful.",
+      accessToken,
+      refreshToken,
+      user: {
+        id: user._id,
+        email: user.email,
+        username: user.username,
+        fullName: user.fullName
+      }
+    });
 
   } catch (err) {
     console.error("Login Error:", err);

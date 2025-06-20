@@ -9,7 +9,7 @@ const router = Router()
 
 router.post("/", createMessage)
 router.get("/", getMessages)
-router.put("/:id", updateMessage)
+router.put("/:id", editMessage)
 router.delete("/:id", deleteMessage)
 
 export default router; 
