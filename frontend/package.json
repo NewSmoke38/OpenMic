@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "live-server --port=3000 --open=index.html --ignore=node_modules --quiet"
+    "dev": "live-server --port=3001 --ignore=node_modules --quiet "
   },
   "keywords": [],
   "author": "",

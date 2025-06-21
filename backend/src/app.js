@@ -5,11 +5,21 @@ const app = express();
 
 app.use(express.json());     // w/o it req.body will stay undefined and no json reqs will be entertained
 
-// cors config
+// cors config - simplified and more permissive
 app.use(cors({
-    origin: ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:5500", "http://127.0.0.1:5500"],
-    credentials: true
-}))
+    origin: function(origin, callback) {
+        if (!origin) return callback(null, true);
+        
+        if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+            return callback(null, true);
+        }
+        
+        return callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 
 // routes import

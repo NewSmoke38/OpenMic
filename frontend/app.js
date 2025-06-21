@@ -16,9 +16,7 @@ const signupCancelBtn = document.getElementById('signupCancelBtn');
 
 // API Integration
 const API_BASE = 'http://localhost:8000/api/v1/auth';
-// Alternative ports if 8000 doesn't work:
-// const API_BASE = 'http://localhost:3000/api/v1/auth';
-// const API_BASE = 'http://localhost:5000/api/v1/auth';
+//5k or 3k maybee
 
 // Register API call
 async function registerUser(username, email, password, fullName) {
