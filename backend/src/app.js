@@ -7,13 +7,26 @@ app.use(express.json());
 
 app.use(cors({
     origin: function(origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
         
+        // Allow localhost for development
         if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
             return callback(null, true);
         }
         
-        return callback(new Error('Not allowed by CORS'));
+        // Allow Vercel domains
+        if (origin.includes('vercel.app') || origin.includes('vercel.com')) {
+            return callback(null, true);
+        }
+        
+        // Allow your specific Vercel domain (replace with your actual domain)
+        if (origin.includes('your-app-name.vercel.app')) {
+            return callback(null, true);
+        }
+        
+        // For now, allow all origins in production (you can restrict this later)
+        return callback(null, true);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
