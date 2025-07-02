@@ -15,13 +15,14 @@ const signupForm = document.getElementById('signupForm');
 const signupCancelBtn = document.getElementById('signupCancelBtn');
 
 // API Integration
-const API_BASE = 'http://localhost:8000/api/v1/auth';
-//5k or 3k maybee
+const API_BASE = 'http://localhost:8000/api/v1';
+const AUTH_BASE = `${API_BASE}/auth`;
+const MESSAGES_BASE = `${API_BASE}/messages`;
 
 // Register API call
 async function registerUser(username, email, password, fullName) {
     try {
-        const response = await fetch(`${API_BASE}/register`, {
+        const response = await fetch(`${AUTH_BASE}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -39,7 +40,7 @@ async function registerUser(username, email, password, fullName) {
 // Login API call
 async function loginUser(email, password) {
     try {
-        const response = await fetch(`${API_BASE}/login`, {
+        const response = await fetch(`${AUTH_BASE}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -57,7 +58,7 @@ async function loginUser(email, password) {
 // Logout API call
 async function logoutUser() {
     try {
-        const response = await fetch(`${API_BASE}/logout`, {
+        const response = await fetch(`${AUTH_BASE}/logout`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,6 +68,65 @@ async function logoutUser() {
         return { success: response.ok, data };
     } catch (error) {
         console.error('Logout error:', error);
+        return { success: false, data: { message: 'Network error' } };
+    }
+}
+
+// Message API calls
+async function createMessage(content, author, authorId) {
+    try {
+        const response = await fetch(`${MESSAGES_BASE}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content, author, authorId })
+        });
+        const data = await response.json();
+        return { success: response.ok, data };
+    } catch (error) {
+        console.error('Create message error:', error);
+        return { success: false, data: { message: 'Network error' } };
+    }
+}
+
+async function fetchMessages() {
+    try {
+        const response = await fetch(`${MESSAGES_BASE}`);
+        const data = await response.json();
+        return { success: response.ok, data };
+    } catch (error) {
+        console.error('Fetch messages error:', error);
+        return { success: false, data: { message: 'Network error' } };
+    }
+}
+
+async function updateMessage(id, content) {
+    try {
+        const response = await fetch(`${MESSAGES_BASE}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content })
+        });
+        const data = await response.json();
+        return { success: response.ok, data };
+    } catch (error) {
+        console.error('Update message error:', error);
+        return { success: false, data: { message: 'Network error' } };
+    }
+}
+
+async function deleteMessage(id) {
+    try {
+        const response = await fetch(`${MESSAGES_BASE}/${id}`, {
+            method: 'DELETE'
+        });
+        const data = await response.json();
+        return { success: response.ok, data };
+    } catch (error) {
+        console.error('Delete message error:', error);
         return { success: false, data: { message: 'Network error' } };
     }
 }
@@ -101,8 +161,11 @@ async function handleLogout() {
     }
 }
 
-// Make handleLogout globally accessible
+// Make functions globally accessible
 window.handleLogout = handleLogout;
+window.editMessage = editMessage;
+window.deleteMessageHandler = deleteMessageHandler;
+window.toggleLike = toggleLike;
 
 // Theme handling
 const savedTheme = localStorage.getItem('theme');
@@ -152,20 +215,20 @@ let messages = [
     },
 ];
 
-// Add after the messages array and before the modal handling
-async function fetchMessages() {
+// Load messages from API
+async function loadMessages() {
     try {
-        // In production, replace with actual API call
-        // const response = await fetch('/messages');
-        // const data = await response.json();
-        // messages = data;
+        console.log('Fetching messages from API...');
+        const result = await fetchMessages();
         
-        // For now, using the sample messages
-        console.log('Fetching messages...');
-        // Simulating API delay
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        renderMessages();
+        if (result.success) {
+            messages = result.data.messages || [];
+            console.log('Messages loaded:', messages);
+            renderMessages();
+        } else {
+            console.error('Failed to load messages:', result.data.message);
+            alert('Failed to load messages: ' + result.data.message);
+        }
     } catch (error) {
         console.error('Error fetching messages:', error);
         alert('Failed to load messages. Please refresh the page.');
@@ -176,7 +239,7 @@ async function fetchMessages() {
 document.addEventListener('DOMContentLoaded', () => {
     // Only fetch messages if we're on the main page (where messageFeed exists)
     if (document.getElementById('messageFeed')) {
-        fetchMessages();
+        loadMessages();
     }
     
     // Check auth state
@@ -215,30 +278,34 @@ messageForm.addEventListener('submit', async (e) => {
     
     const messageContent = document.getElementById('messageContent').value;
     
-    const newMessage = {
-        id: Date.now(),
-        author: currentUser?.email || 'Anonymous',
-        content: messageContent,
-        timestamp: new Date(),
-        likes: 0,
-        liked: false
-    };
+    if (!messageContent.trim()) {
+        alert('Please enter a message!');
+        return;
+    }
 
     try {
-        // In production, replace with actual API call
-        // await fetch('/messages', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(newMessage)
-        // });
+        const result = await createMessage(
+            messageContent,
+            currentUser?.email || 'Anonymous',
+            currentUser?.id || '000000000000000000000000'
+        );
         
-        messages.unshift(newMessage);
-        renderMessages();
-        
-        // Reset and close modal
-        messageForm.reset();
-        createMessageModal.classList.add('hidden');
-        createMessageModal.classList.remove('flex');
+        if (result.success) {
+            console.log('Message created successfully:', result.data);
+            
+            // Refresh messages from server
+            await loadMessages();
+            
+            // Reset and close modal
+            messageForm.reset();
+            createMessageModal.classList.add('hidden');
+            createMessageModal.classList.remove('flex');
+            
+            alert('Message posted successfully!');
+        } else {
+            console.log('Message creation failed:', result.data.message);
+            alert('Failed to post message: ' + result.data.message);
+        }
     } catch (error) {
         console.error('Error posting message:', error);
         alert('Failed to post message. Please try again.');
@@ -378,7 +445,7 @@ function renderMessages() {
             <p class="text-gray-700 mb-4">${escapeHtml(message.content)}</p>
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-1">
-                    <button onclick="toggleLike(${message.id})" class="like-btn ${isLoggedIn ? 'text-[#c49ac4] hover:text-[#a87aa8]' : 'text-gray-400 cursor-not-allowed'} transition-colors flex items-center gap-1">
+                    <button onclick="toggleLike('${message._id}')" class="like-btn ${isLoggedIn ? 'text-[#c49ac4] hover:text-[#a87aa8]' : 'text-gray-400 cursor-not-allowed'} transition-colors flex items-center gap-1">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="${message.liked ? 'currentColor' : 'none'}" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -387,10 +454,10 @@ function renderMessages() {
                 </div>
                 ${isLoggedIn && message.author === currentUser?.email ? `
                     <div class="flex space-x-2">
-                        <button onclick="editMessage(${message.id})" class="text-gray-500 hover:text-gray-700">
+                        <button onclick="editMessage('${message._id}')" class="text-gray-500 hover:text-gray-700">
                             ✏️
                         </button>
-                        <button onclick="deleteMessage(${message.id})" class="text-gray-500 hover:text-red-500">
+                        <button onclick="deleteMessageHandler('${message._id}')" class="text-gray-500 hover:text-red-500">
                             🗑️
                         </button>
                     </div>
@@ -406,7 +473,7 @@ function renderMessages() {
 }
 
 function toggleLike(messageId) {
-    const message = messages.find(m => m.id === messageId);
+    const message = messages.find(m => m._id === messageId);
     if (message) {
         message.liked = !message.liked;
         message.likes = (message.likes || 0) + (message.liked ? 1 : -1);
@@ -440,22 +507,22 @@ function escapeHtml(unsafe) {
 
 // Update the edit message function
 async function editMessage(id) {
-    const message = messages.find(m => m.id === id);
+    const message = messages.find(m => m._id === id);
     if (!message) return;
 
     const newContent = prompt('Edit your message:', message.content);
     if (newContent === null || newContent === message.content) return;
 
     try {
-        // In production, replace with actual API call
-        // await fetch(`/messages/${id}`, {
-        //     method: 'PATCH',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ content: newContent })
-        // });
+        const result = await updateMessage(id, newContent);
         
-        message.content = newContent;
-        renderMessages();
+        if (result.success) {
+            console.log('Message updated successfully:', result.data);
+            await loadMessages(); // Refresh messages from server
+        } else {
+            console.log('Message update failed:', result.data.message);
+            alert('Failed to update message: ' + result.data.message);
+        }
     } catch (error) {
         console.error('Error editing message:', error);
         alert('Failed to edit message. Please try again.');
@@ -463,17 +530,19 @@ async function editMessage(id) {
 }
 
 // Update the delete message function
-async function deleteMessage(id) {
+async function deleteMessageHandler(id) {
     if (!confirm('Are you sure you want to delete this message?')) return;
 
     try {
-        // In production, replace with actual API call
-        // await fetch(`/messages/${id}`, {
-        //     method: 'DELETE'
-        // });
+        const result = await deleteMessage(id);
         
-        messages = messages.filter(m => m.id !== id);
-        renderMessages();
+        if (result.success) {
+            console.log('Message deleted successfully:', result.data);
+            await loadMessages(); // Refresh messages from server
+        } else {
+            console.log('Message deletion failed:', result.data.message);
+            alert('Failed to delete message: ' + result.data.message);
+        }
     } catch (error) {
         console.error('Error deleting message:', error);
         alert('Failed to delete message. Please try again.');

@@ -27,8 +27,8 @@ const userSchema = new Schema(
       password: {
         type: String,
         required: true,
-        minlength: 2,
-        maxlength: 10
+        minlength: 6,
+        maxlength: 100
       }
 
     },
@@ -66,7 +66,7 @@ userSchema.methods.generateRefreshToken = function () {
     return jwt.sign(
         { _id: this._id },
         process.env.ACCESS_REFRESH_SECRET,
-        { expiresIn: process.env.ACCESS_REFRESH_EXPIRY }
+        { expiresIn: process.env.ACCESS_REFRESH_EXPIRY || "7d" }
     )
 }
 

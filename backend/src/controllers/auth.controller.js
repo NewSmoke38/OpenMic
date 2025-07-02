@@ -1,24 +1,5 @@
 import { User } from "../models/user.model.js";
 
-
-const generateAccessAndRefreshTokens = async (userId) => {
-    try {
-        const user = await User.findById(userId)
-        const accessToken = user.generateAccessToken()
-        const refreshToken = user.generateRefreshToken()
-
-        user.refreshToken = refreshToken
-        user.save({ validateBeforeSave: false })
-
-        return { accessToken, refreshToken }
-
-    } catch (error) {
-        throw new ApiError(500, "Something went wrong while generating refresh and access token!")
-    }
-};
-
-
-
 // registering a user
 const registerUser = async (req, res) => {
   try {
@@ -82,7 +63,52 @@ const registerUser = async (req, res) => {
   }
 };
 
+// login user
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Basic validation
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required." });
+    }
+
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password." });
+    }
+
+    // Check password
+    const isPasswordValid = await user.isPasswordCorrect(password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid email or password." });
+    }
+
+    // Generate tokens
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+
+    // Success response
+    res.status(200).json({
+      message: "Login successful.",
+      accessToken,
+      refreshToken,
+      user: {
+        id: user._id,
+        email: user.email,
+        username: user.username,
+        fullName: user.fullName
+      }
+    });
+
+  } catch (err) {
+    console.error("Login Error:", err);
+    res.status(500).json({ message: "Server error." });
+  }
+};
 
 export {
-    registerUser
+    registerUser,
+    loginUser
 };

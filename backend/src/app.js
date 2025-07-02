@@ -3,7 +3,7 @@ import cors from "cors";
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json());     
 
 app.use(cors({
     origin: function(origin, callback) {
@@ -23,8 +23,14 @@ app.use(cors({
 
 // routes import
 import userRouter from './routes/auth.route.js'
+import messageRouter from './routes/message.route.js'
 
-// declare routes
-app.use("/api/v1/auth", userRouter)
+// routes declaration
+app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/messages", messageRouter);
+
+
+// http://localhost:8000/api/v1/users/register
+
 
 export default app;
