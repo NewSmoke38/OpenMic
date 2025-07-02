@@ -221,6 +221,7 @@ let messages = [];
 async function loadMessages() {
     try {
         console.log('Fetching messages from API...');
+        
         const result = await fetchMessages();
         
         if (result.success) {
@@ -229,19 +230,49 @@ async function loadMessages() {
             renderMessages();
         } else {
             console.error('Failed to load messages:', result.data.message);
-            alert('Failed to load messages: ' + result.data.message);
+            messageFeed.innerHTML = `
+                <div class="bg-white/80 backdrop-blur-sm rounded-xl p-12 shadow-lg text-center">
+                    <div class="text-6xl mb-4">⚠️</div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Connection Error</h3>
+                    <p class="text-gray-600 mb-4">Failed to load messages: ${result.data.message}</p>
+                    <button onclick="loadMessages()" class="px-6 py-2 bg-pastel-purple/60 hover:bg-pastel-purple/80 text-white rounded-full transition-all">
+                        Try Again
+                    </button>
+                </div>
+            `;
         }
     } catch (error) {
         console.error('Error fetching messages:', error);
-        alert('Failed to load messages. Please refresh the page.');
+        messageFeed.innerHTML = `
+            <div class="bg-white/80 backdrop-blur-sm rounded-xl p-12 shadow-lg text-center">
+                <div class="text-6xl mb-4">🌐</div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Server Starting Up</h3>
+                <p class="text-gray-600 mb-4">The server is waking up, please wait a moment...</p>
+                <button onclick="loadMessages()" class="px-6 py-2 bg-pastel-purple/60 hover:bg-pastel-purple/80 text-white rounded-full transition-all">
+                    Try Again
+                </button>
+            </div>
+        `;
     }
 }
 
 // Add event listener for page load
 document.addEventListener('DOMContentLoaded', () => {
-    // Only fetch messages if we're on the main page (where messageFeed exists)
+    // Show loading state immediately for 7 seconds
     if (document.getElementById('messageFeed')) {
-        loadMessages();
+        // Show loading state first
+        messageFeed.innerHTML = `
+            <div class="bg-white/80 backdrop-blur-sm rounded-xl p-12 shadow-lg text-center">
+                <div class="text-6xl mb-4 animate-pulse">⏳</div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Loading messages...</h3>
+                <p class="text-gray-600">Connecting to the community...</p>
+            </div>
+        `;
+        
+        // Wait 7 seconds, then load messages
+        setTimeout(() => {
+            loadMessages();
+        }, 7000);
     }
     
     // Check auth state
@@ -591,5 +622,27 @@ async function deleteMessageHandler(id) {
         alert('Failed to delete message. Please try again.');
     }
 }
+
+// Test function to simulate loading state (remove this in production)
+function testLoadingState() {
+    if (document.getElementById('messageFeed')) {
+        // Show loading state
+        messageFeed.innerHTML = `
+            <div class="bg-white/80 backdrop-blur-sm rounded-xl p-12 shadow-lg text-center">
+                <div class="text-6xl mb-4 animate-pulse">⏳</div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Loading messages...</h3>
+                <p class="text-gray-600">Connecting to the community...</p>
+            </div>
+        `;
+        
+        // Wait 7 seconds, then load messages
+        setTimeout(() => {
+            loadMessages();
+        }, 7000);
+    }
+}
+
+// Make test function globally accessible
+window.testLoadingState = testLoadingState;
 
 // Messages will be loaded from API when page loads 
