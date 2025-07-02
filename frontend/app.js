@@ -324,20 +324,13 @@ messageForm.addEventListener('submit', async (e) => {
         );
         
         if (result.success) {
-            console.log('Message created successfully:', result.data);
-            
+            // Success: do not alert or log
             // Refresh messages from server
             await loadMessages();
-            
             // Reset and close modal
             messageForm.reset();
             createMessageModal.classList.add('hidden');
             createMessageModal.classList.remove('flex');
-            
-            alert('Message posted successfully!');
-        } else {
-            console.log('Message creation failed:', result.data.message);
-            alert('Failed to post message: ' + result.data.message);
         }
     } catch (error) {
         console.error('Error posting message:', error);
@@ -377,25 +370,21 @@ loginForm.addEventListener('submit', async (e) => {
         const result = await loginUser(email, password);
         
         if (result.success) {
-            console.log('Login successful:', result.data);
+            // Success: do not alert or log
             isLoggedIn = true;
             currentUser = {
                 email: result.data.user.email,
                 username: result.data.user.username,
                 id: result.data.user._id || result.data.user.id
             };
-            
             // Reset and close modal
             loginForm.reset();
             loginModal.classList.add('hidden');
             loginModal.classList.remove('flex');
-            
             // Update UI to show logged in state
             document.getElementById('loginBtn').classList.add('hidden');
             document.getElementById('signupBtn').classList.add('hidden');
             document.getElementById('logoutBtn').classList.remove('hidden');
-            
-            alert('Login successful!');
         } else {
             console.log('Login failed:', result.data.message);
             alert('Login failed: ' + result.data.message);
@@ -436,15 +425,9 @@ signupForm.addEventListener('submit', async (e) => {
     const password = document.getElementById('signupPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
     const fullName = document.getElementById('signupName').value; // Using name as fullName
-    const termsAgree = document.getElementById('termsAgree').checked;
     
     if (password !== confirmPassword) {
         alert('Passwords do not match!');
-        return;
-    }
-    
-    if (!termsAgree) {
-        alert('Please agree to the Terms and Conditions');
         return;
     }
     
@@ -452,17 +435,11 @@ signupForm.addEventListener('submit', async (e) => {
         const result = await registerUser(username, email, password, fullName);
         
         if (result.success) {
-            console.log('Registration successful:', result.data);
-            
+            // Success: do not alert or log
             // Reset and close modal
             signupForm.reset();
             signupModal.classList.add('hidden');
             signupModal.classList.remove('flex');
-            
-            alert('Registration successful! You can now login.');
-        } else {
-            console.log('Registration failed:', result.data.message);
-            alert('Registration failed: ' + result.data.message);
         }
     } catch (error) {
         console.error('Error signing up:', error);
