@@ -812,4 +812,17 @@ input:focus, textarea:focus {
     background: rgba(224, 187, 228, 0.85) !important;
     box-shadow: 0 0 15px rgba(224, 187, 228, 0.4) !important;
     transform: translateY(-2px);
+}
+
+.dark #createMessageModal textarea {
+    background: #2d223a;
+    color: #fff;
+    border-color: #B5D8EB;
+    box-shadow: 0 0 0 2px #B5D8EB55;
+    transition: background 0.2s, border-color 0.2s;
+}
+.dark #createMessageModal textarea:focus {
+    background: #3a2950;
+    border-color: #E0BBE4;
+    color: #fff;
 } 
