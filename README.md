@@ -65,7 +65,7 @@ in this project i got no deployment issues cause i used my own deploymnt guide l
    - `cd backend`
    - Create a `.env` 
    - `npm install && npm run dev`
-   just dont forget adding a de script in the package.json file, and youre all set!
+   - just dont forget adding a dev script in the package.json file, and youre all set!
 
 3. **Set up frontend:**
    - `cd frontend`
@@ -74,7 +74,9 @@ in this project i got no deployment issues cause i used my own deploymnt guide l
 4. **Deploy:**
    - Backend: [Render](https://render.com/)
    - Frontend: [Vercel](https://vercel.com/)
-
+ 
+ [deploy guide](https://www.canva.com/design/DAGr98vTJvE/F9E6OM-TN6kkMR6Zst6LRw/edit?utm_content=DAGr98vTJvE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+ 
 ---
 
 [also slides to my backend workshop](https://www.canva.com/design/DAGqNshnJps/azaS38i9GzxvVSCNz30TvQ/edit?utm_content=DAGqNshnJps&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
