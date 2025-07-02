@@ -2,7 +2,7 @@
 
 Welcome to **OpenMic** — a modern, anonymous message board where anyone can share their thoughts, connect, and be heard. Built with love, learning, and a passion for open expression.
 
----
+
 
 ## 🌟 Why I Made This
 
@@ -12,7 +12,7 @@ I am proud of it. very much. <3
 
 OpenMic is my take on a friendly, welcoming, and modern message board for all. also cutesy vibes hehe. 
 
----
+
 
 ## 🛠️ How I Made It
 
@@ -30,7 +30,7 @@ OpenMic is my take on a friendly, welcoming, and modern message board for all. a
   - Real-time updates (fetches latest messages)
   - CORS, security, and production-ready deployment
 
----
+
 
 ## 🚀 What I Learned
 
@@ -41,7 +41,7 @@ actually i had never taught like this so i was just realising how i skim through
 
 and then i felt amazing that some people now know backend from my eyes!!!!!
 
----
+
 
 ## 🧗 Struggles & Solutions
 
@@ -52,7 +52,7 @@ and then i felt amazing that some people now know backend from my eyes!!!!!
 # Fun-Fact 
 in this project i got no deployment issues cause i used my own deploymnt guide lol, for my upcoming deployment workshop of this series.
 
----
+
 
 ## 📝 Quick Start (For Developers)
 
