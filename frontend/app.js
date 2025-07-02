@@ -15,7 +15,9 @@ const signupForm = document.getElementById('signupForm');
 const signupCancelBtn = document.getElementById('signupCancelBtn');
 
 // API Integration
-const API_BASE = 'http://localhost:8000/api/v1';
+const API_BASE = window.location.hostname === 'localhost' 
+    ? 'http://localhost:8000/api/v1' 
+    : 'https://openmic-h10h.onrender.com/api/v1';
 const AUTH_BASE = `${API_BASE}/auth`;
 const MESSAGES_BASE = `${API_BASE}/messages`;
 
@@ -212,27 +214,8 @@ themeToggle.addEventListener('click', () => {
     }
 });
 
-// Sample messages array (replace with API calls in production)
-let messages = [
-    {
-        id: 1,
-        author: "Lila the Lamb",
-        content: "Welcome to the sheep box! 🐑",
-        timestamp: new Date(Date.now() - 1000 * 60 * 2),
-    },
-    {
-        id: 2,
-        author: "Wooly",
-        content: "This is so cute!",
-        timestamp: new Date(Date.now() - 1000 * 60 * 10),
-    },
-    {
-        id: 3,
-        author: "Shepherd",
-        content: "Leave your message in the box below!",
-        timestamp: new Date(Date.now() - 1000 * 60 * 60),
-    },
-];
+// Messages array (will be populated from API)
+let messages = [];
 
 // Load messages from API
 async function loadMessages() {
@@ -458,6 +441,21 @@ signupForm.addEventListener('submit', async (e) => {
 
 // Render messages
 function renderMessages() {
+    // Check if there are no messages
+    if (messages.length === 0) {
+        messageFeed.innerHTML = `
+            <div class="bg-white/80 backdrop-blur-sm rounded-xl p-12 shadow-lg text-center">
+                <div class="text-6xl mb-4">📝</div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">No messages yet</h3>
+                <p class="text-gray-600">Be the first to share your thoughts!</p>
+                <button onclick="document.getElementById('createMessageBtn').click()" class="mt-4 px-6 py-2 bg-pastel-purple/60 hover:bg-pastel-purple/80 text-white rounded-full transition-all">
+                    Create First Message
+                </button>
+            </div>
+        `;
+        return;
+    }
+    
     // Render oldest at top, newest at bottom
     messageFeed.innerHTML = messages.slice().reverse().map(message => {
         // Check if current user has liked this message
@@ -594,5 +592,4 @@ async function deleteMessageHandler(id) {
     }
 }
 
-// Initial render
-renderMessages(); 
+// Messages will be loaded from API when page loads 
