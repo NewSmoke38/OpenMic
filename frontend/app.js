@@ -131,6 +131,25 @@ async function deleteMessage(id) {
     }
 }
 
+async function likeMessage(id) {
+    try {
+        const response = await fetch(`${MESSAGES_BASE}/${id}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                userId: currentUser?.id || '000000000000000000000000' 
+            })
+        });
+        const data = await response.json();
+        return { success: response.ok, data };
+    } catch (error) {
+        console.error('Like message error:', error);
+        return { success: false, data: { message: 'Network error' } };
+    }
+}
+
 // Auth state management
 let isLoggedIn = false;
 let currentUser = null;
@@ -286,7 +305,7 @@ messageForm.addEventListener('submit', async (e) => {
     try {
         const result = await createMessage(
             messageContent,
-            currentUser?.email || 'Anonymous',
+            currentUser?.username || 'Anonymous',
             currentUser?.id || '000000000000000000000000'
         );
         
@@ -346,7 +365,11 @@ loginForm.addEventListener('submit', async (e) => {
         if (result.success) {
             console.log('Login successful:', result.data);
             isLoggedIn = true;
-            currentUser = { email }; // Set current user info
+            currentUser = {
+                email: result.data.user.email,
+                username: result.data.user.username,
+                id: result.data.user._id || result.data.user.id
+            };
             
             // Reset and close modal
             loginForm.reset();
@@ -436,23 +459,30 @@ signupForm.addEventListener('submit', async (e) => {
 // Render messages
 function renderMessages() {
     // Render oldest at top, newest at bottom
-    messageFeed.innerHTML = messages.slice().reverse().map(message => `
+    messageFeed.innerHTML = messages.slice().reverse().map(message => {
+        // Check if current user has liked this message
+        const userLiked = message.likedBy && message.likedBy.some(id => id.toString() === currentUser?.id);
+        
+        // Debug logging
+        console.log('Message:', message._id, 'Current User ID:', currentUser?.id, 'LikedBy:', message.likedBy, 'UserLiked:', userLiked);
+        
+        return `
         <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
             <div class="flex justify-between items-start mb-4">
                 <h3 class="author font-semibold">${escapeHtml(message.author)}</h3>
-                <span class="text-sm text-gray-500">${formatTimestamp(message.timestamp)}</span>
+                <span class="text-sm text-gray-500">${formatTimestamp(message.timestamp || message.createdAt)}</span>
             </div>
             <p class="text-gray-700 mb-4">${escapeHtml(message.content)}</p>
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-1">
-                    <button onclick="toggleLike('${message._id}')" class="like-btn ${isLoggedIn ? 'text-[#c49ac4] hover:text-[#a87aa8]' : 'text-gray-400 cursor-not-allowed'} transition-colors flex items-center gap-1">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="${message.liked ? 'currentColor' : 'none'}" xmlns="http://www.w3.org/2000/svg">
+                    <button onclick="toggleLike('${message._id}')" class="like-btn ${isLoggedIn ? 'text-[#c49ac4] hover:text-[#a87aa8] cursor-pointer' : 'text-gray-400 cursor-not-allowed opacity-50'} transition-colors flex items-center gap-1">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="${userLiked ? 'currentColor' : 'none'}" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                         <span class="text-sm">${message.likes || 0}</span>
                     </button>
                 </div>
-                ${isLoggedIn && message.author === currentUser?.email ? `
+                ${isLoggedIn && message.author === currentUser?.username ? `
                     <div class="flex space-x-2">
                         <button onclick="editMessage('${message._id}')" class="text-gray-500 hover:text-gray-700">
                             ✏️
@@ -464,7 +494,7 @@ function renderMessages() {
                 ` : ''}
             </div>
         </div>
-    `).join('');
+    `}).join('');
     
     // Scroll to top to show oldest messages first (with small delay to ensure DOM update)
     setTimeout(() => {
@@ -472,12 +502,27 @@ function renderMessages() {
     }, 10);
 }
 
-function toggleLike(messageId) {
-    const message = messages.find(m => m._id === messageId);
-    if (message) {
-        message.liked = !message.liked;
-        message.likes = (message.likes || 0) + (message.liked ? 1 : -1);
-        renderMessages();
+// Update the like function to use backend API
+async function toggleLike(messageId) {
+    // Check if user is logged in
+    if (!isLoggedIn) {
+        alert('Please log in to like messages!');
+        return;
+    }
+    
+    try {
+        const result = await likeMessage(messageId);
+        
+        if (result.success) {
+            console.log('Message liked successfully:', result.data);
+            await loadMessages(); // Refresh messages to show updated like count
+        } else {
+            console.log('Like failed:', result.data.message);
+            alert('Failed to like message: ' + result.data.message);
+        }
+    } catch (error) {
+        console.error('Error liking message:', error);
+        alert('Failed to like message. Please try again.');
     }
 }
 
