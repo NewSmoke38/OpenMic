@@ -12,8 +12,11 @@
   "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^10.4.21",
+    "live-server": "^1.2.2",
     "postcss": "^8.5.5",
-    "tailwindcss": "^4.1.10",
-    "live-server": "^1.2.2"
+    "tailwindcss": "^4.1.10"
+  },
+  "dependencies": {
+    "mongoose": "^8.16.3"
   }
 }
