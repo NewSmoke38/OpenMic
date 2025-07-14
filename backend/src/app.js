@@ -21,7 +21,7 @@ app.use(cors({
         }
         
         // Allow your specific Vercel domain (replace with your actual domain)
-        if (origin.includes('your-app-name.vercel.app')) {
+        if (origin.includes('https://openmic-one.vercel.app/')) {
             return callback(null, true);
         }
         
