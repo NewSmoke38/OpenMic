@@ -17,7 +17,7 @@ const signupCancelBtn = document.getElementById('signupCancelBtn');
 // API Integration
 const API_BASE = window.location.hostname === 'localhost' 
     ? 'http://localhost:8000/api/v1' 
-    : 'https://openmic-h10h.onrender.com/api/v1';
+    : 'https://openmic-ovf8.onrender.com/api/v1';
 const AUTH_BASE = `${API_BASE}/auth`;
 const MESSAGES_BASE = `${API_BASE}/messages`;
 
