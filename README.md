@@ -12,7 +12,7 @@ I am proud of it. very much. <3
 
 OpenMic is my take on a friendly, welcoming, and modern message board for all. also cutesy vibes hehe. 
 
-
+[![Athena Award Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Faward.athena.hackclub.com%2Fapi%2Fbadge)](https://award.athena.hackclub.com?utm_source=readme)
 
 ## 🛠️ How I Made It
 
